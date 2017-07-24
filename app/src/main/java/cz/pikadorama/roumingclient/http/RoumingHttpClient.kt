@@ -40,7 +40,7 @@ class RoumingHttpClient(val context: Context) {
         createRequestQueue().add(request)
     }
 
-    //    private fun createRequestQueue() = Volley.newRequestQueue(context, ProxyStack())
+//    private fun createRequestQueue() = Volley.newRequestQueue(context, ProxyStack())
     private fun createRequestQueue() = Volley.newRequestQueue(context)
 
     inner class ProxyStack : HurlStack() {
