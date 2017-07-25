@@ -18,19 +18,19 @@ class TopicListAdapter : ArrayAdapter<Topic> {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
         val view = LayoutInflater.from(context).inflate(R.layout.item, parent, false)
-        val item = getItem(position)
+        val topic = getItem(position)
 
         Picasso.with(context)
-                .load(Uri.parse(item.imageDirectLink()))
+                .load(Uri.parse(topic.imageDirectLink()))
                 .fit().centerCrop()
                 .placeholder(R.drawable.image_loading)
                 .error(R.drawable.error_image_loading)
                 .into(view.thumbnail)
 
-        view.title.text = item.title
-        view.upvotes.text = item.upvotes.toString()
-        view.downvotes.text = item.downvotes.toString()
-        view.comments.text = item.comments.toString()
+        view.title.text = topic.title
+        view.upvotes.text = topic.upvotes.toString()
+        view.downvotes.text = topic.downvotes.toString()
+        view.comments.text = topic.comments.toString()
         return view
     }
 }

@@ -1,83 +1,59 @@
 package cz.pikadorama.roumingclient.activity
 
-import android.os.AsyncTask
+import android.app.Fragment
 import android.os.Bundle
+import android.support.design.widget.NavigationView
+import android.support.v4.view.GravityCompat
+import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
-import com.android.volley.Response
 import cz.pikadorama.roumingclient.R
-import cz.pikadorama.roumingclient.adapter.TopicListAdapter
-import cz.pikadorama.roumingclient.data.Topic
-import cz.pikadorama.roumingclient.data.TopicDao
-import cz.pikadorama.roumingclient.http.RoumingHttpClient
-import cz.pikadorama.roumingclient.toast
-import cz.pikadorama.simpleorm.DaoManager
+import cz.pikadorama.roumingclient.fragment.FavoritesFragment
+import cz.pikadorama.roumingclient.fragment.LatestFragment
+import cz.pikadorama.roumingclient.fragment.TopFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
-
-class MainActivity : AppCompatActivity() {
-
-    val dao = DaoManager.getDao(TopicDao::class.java)
-    var activeTab = R.id.tabLatest
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        navigation.setOnNavigationItemSelectedListener({ bottomNavListener(it) })
-        refreshLayout.setOnRefreshListener({ fetchTopicsFromWeb() })
-
-        restoreCachedTopics()
+        initActionBar()
+        initNavigation()
+        replaceFragment(LatestFragment())
     }
 
-    private fun fetchTopicsFromWeb() {
-        when (activeTab) {
-            R.id.tabLatest -> RoumingHttpClient(this).fetchLatest(Response.Listener { processWebResponse(it) },
-                                                                  Response.ErrorListener {
-                                                                      toast(R.string.error_load_topics)
-                                                                  })
-            R.id.tabTop -> RoumingHttpClient(this).fetchTop(Response.Listener { processWebResponse(it) },
-                                                            Response.ErrorListener {
-                                                                toast(R.string.error_load_topics)
-                                                            })
-        }
-
+    private fun initActionBar() {
+        setSupportActionBar(toolbar)
+        val toggle = ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_open, R.string.navigation_close)
+        drawer.addDrawerListener(toggle)
+        toggle.syncState()
     }
 
-    private fun processWebResponse(response: String) {
-        val topics = Topic.Factory.fromResponse(response)
-        list.adapter = TopicListAdapter(this, topics)
-        refreshLayout.isRefreshing = false
-
-        saveFetchedDataToDatabase(topics)
+    private fun initNavigation() {
+        navigation.setNavigationItemSelectedListener(this)
     }
 
-    private fun saveFetchedDataToDatabase(topics: List<Topic>) {
-        AsyncTask.execute {
-            dao.deleteAll()
-            topics.forEach { dao.create(it.toTopicDao()) }
+    override fun onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START)
+        } else {
+            super.onBackPressed()
         }
     }
 
-    private fun restoreCachedTopics() {
-        list.adapter = TopicListAdapter(this, dao.findAll().map { it.toTopic() })
-    }
-
-    private fun fetchFavoriteTopicsFromDatabase() {
-        list.adapter = TopicListAdapter(this, emptyList())
-    }
-
-    private fun bottomNavListener(item: MenuItem): Boolean {
-        activeTab = item.itemId
-        when (activeTab) {
-            R.id.tabFavorites -> fetchFavoriteTopicsFromDatabase()
-            else -> fetchTopicsFromWeb()
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.latest -> replaceFragment(LatestFragment())
+            R.id.top -> replaceFragment(TopFragment())
+            R.id.favorites -> replaceFragment(FavoritesFragment())
         }
+
+        drawer.closeDrawer(GravityCompat.START)
         return true
     }
 
+    private fun replaceFragment(fragment: Fragment) {
+        fragmentManager.beginTransaction().replace(R.id.content, fragment).commit()
+    }
 }
-
-
-
-
