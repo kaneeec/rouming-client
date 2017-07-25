@@ -14,28 +14,18 @@ import java.net.URL
 
 class RoumingHttpClient(val context: Context) {
 
-    enum class RoumingTimeRange(val postParamValue: Int) {
-        DAY(1),
-        WEEK(2),
-        MONTH(3),
-        THREE_MONHTS(4),
-        SIX_MONTHS(5),
-        YEAR(6),
-        INFINITY(7)
-    }
-
     fun fetchLatest(onSuccess: Response.Listener<String>, onError: Response.ErrorListener) {
         val url = "http://www.rouming.cz"
         val request = StringRequest(Request.Method.GET, url, onSuccess, onError)
         createRequestQueue().add(request)
     }
 
-    fun fetchTop(onSuccess: Response.Listener<String>, onError: Response.ErrorListener,
-                 timeRange: RoumingTimeRange = RoumingTimeRange.DAY) {
+    fun fetchTop(limit: Int, interval: Int, onSuccess: Response.Listener<String>, onError: Response.ErrorListener) {
         val url = "http://www.rouming.cz/roumingListTop.php"
         val request = object : StringRequest(Request.Method.POST, url, onSuccess, onError) {
-            override fun getParams(): Map<String, String> = mapOf(Pair("count", "1"), Pair("operation", "1"),
-                                                                  Pair("interval", timeRange.postParamValue.toString()))
+            override fun getParams(): Map<String, String> = mapOf(Pair("count", limit.toString()),
+                                                                  Pair("operation", "1"),
+                                                                  Pair("interval", interval.toString()))
         }
         createRequestQueue().add(request)
     }

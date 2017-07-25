@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_main)
         initActionBar()
         initNavigation()
-        replaceFragment(LatestFragment())
+        showFragment(LatestFragment())
     }
 
     private fun initActionBar() {
@@ -44,16 +44,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.latest -> replaceFragment(LatestFragment())
-            R.id.top -> replaceFragment(TopFragment())
-            R.id.favorites -> replaceFragment(FavoritesFragment())
+            R.id.latest -> showFragment(LatestFragment())
+            R.id.top -> showFragment(TopFragment())
+            R.id.favorites -> showFragment(FavoritesFragment())
         }
 
         drawer.closeDrawer(GravityCompat.START)
         return true
     }
 
-    private fun replaceFragment(fragment: Fragment) {
+    private fun showFragment(fragment: Fragment) {
         fragmentManager.beginTransaction().replace(R.id.content, fragment).commit()
     }
 }
