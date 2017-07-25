@@ -27,6 +27,8 @@ data class Topic(
     constructor(posted: String, comments: Int, upvotes: Int, downvotes: Int, link: String, title: String, type: Type)
             : this(null, posted, comments, upvotes, downvotes, link, title, type)
 
+    fun imageDirectLink(): String = link.replace("roumingShow.php?file=", "upload/")
+
     companion object {
         const val COL_POSTED = "posted"
         const val COL_COMMENTS = "comments"
@@ -70,6 +72,4 @@ data class Topic(
             throw IllegalStateException()
         }
     }
-
-    fun imageDirectLink(): String = link.replace("roumingShow.php?file=", "upload/")
 }

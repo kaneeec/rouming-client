@@ -25,6 +25,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.TopicDetailActivity"/>
+        <activity
+            android:name=".activity.ImageFullscreenActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

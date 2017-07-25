@@ -8,18 +8,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import com.android.volley.Response
-import cz.pikadorama.roumingclient.R
+import cz.pikadorama.roumingclient.*
 import cz.pikadorama.roumingclient.activity.TopicDetailActivity
 import cz.pikadorama.roumingclient.adapter.TopicListAdapter
-import cz.pikadorama.roumingclient.dao
 import cz.pikadorama.roumingclient.data.Topic
 import cz.pikadorama.roumingclient.http.RoumingHttpClient
-import cz.pikadorama.roumingclient.toast
-import cz.pikadorama.roumingclient.updateTopicsInDatabase
 import kotlinx.android.synthetic.main.latest.*
 import kotlinx.android.synthetic.main.latest.view.*
 
 class LatestFragment : Fragment() {
+
+    lateinit var adapter: TopicListAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val root = inflater.inflate(R.layout.latest, container, false)
@@ -28,9 +27,11 @@ class LatestFragment : Fragment() {
 
         val lv = root.findViewById(android.R.id.list) as ListView
         lv.setOnItemClickListener { _, _, position, id ->
-            startActivity(Intent(activity, TopicDetailActivity::class.java))
+            val intent = Intent(activity, TopicDetailActivity::class.java)
+            intent.putExtras(adapter.getItem(position).toBundle())
+            startActivity(intent)
         }
-        
+
         return root
     }
 
@@ -61,7 +62,8 @@ class LatestFragment : Fragment() {
     }
 
     private fun updateList(topics: List<Topic>) {
-        list.adapter = TopicListAdapter(activity, topics)
+        this.adapter = TopicListAdapter(activity, topics)
+        list.adapter = this.adapter
     }
 
 }
