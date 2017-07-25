@@ -6,89 +6,97 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.makeramen.roundedimageview.RoundedImageView
-        android:id="@+id/thumbnail"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/thumbnail_height"
-        android:layout_marginBottom="@dimen/thumbnail_margin"
+    <RelativeLayout
         android:layout_marginTop="@dimen/thumbnail_margin"
-        app:riv_corner_radius="@dimen/rounded_image_radius"/>
-
-    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
 
-        <RelativeLayout
+        <LinearLayout
+            android:id="@+id/infobar"
+            android:layout_alignParentLeft="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:layout_weight="1"
-            android:gravity="center_vertical">
+            android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/commentsIcon"
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_marginRight="@dimen/item_desc_icon_margin"
-                android:src="@drawable/comments"/>
+                android:layout_gravity="left"
+                android:gravity="center_vertical">
 
-            <TextView
-                android:id="@+id/comments"
+                <ImageView
+                    android:id="@+id/commentsIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginRight="@dimen/item_desc_icon_margin"
+                    android:src="@drawable/comments"/>
+
+                <TextView
+                    android:id="@+id/comments"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/commentsIcon"/>
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/commentsIcon"/>
-        </RelativeLayout>
+                android:layout_gravity="left"
+                android:layout_marginTop="@dimen/thumbnail_margin"
+                android:gravity="center_vertical">
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:layout_weight="1"
-            android:gravity="center_vertical">
+                <ImageView
+                    android:id="@+id/upvotesIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginRight="@dimen/item_desc_icon_margin"
+                    android:src="@drawable/upvotes"/>
 
-            <ImageView
-                android:id="@+id/upvotesIcon"
+                <TextView
+                    android:id="@+id/upvotes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/upvotesIcon"/>
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_marginRight="@dimen/item_desc_icon_margin"
-                android:src="@drawable/upvotes"/>
+                android:layout_gravity="left"
+                android:layout_marginTop="@dimen/thumbnail_margin"
+                android:gravity="center_vertical">
 
-            <TextView
-                android:id="@+id/upvotes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/upvotesIcon"/>
-        </RelativeLayout>
+                <ImageView
+                    android:id="@+id/downvotesIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/item_desc_icon_margin"
+                    android:src="@drawable/downvotes"/>
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:layout_weight="1"
-            android:gravity="center_vertical">
+                <TextView
+                    android:id="@+id/downvotes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/downvotesIcon"/>
+            </RelativeLayout>
 
-            <ImageView
-                android:id="@+id/downvotesIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/item_desc_icon_margin"
-                android:src="@drawable/downvotes"/>
+        </LinearLayout>
 
-            <TextView
-                android:id="@+id/downvotes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/downvotesIcon"
-                android:textSize="@dimen/item_desc_font_size"/>
-        </RelativeLayout>
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/thumbnail"
+            android:layout_width="match_parent"
+            android:layout_toRightOf="@+id/infobar"
+            android:layout_height="@dimen/thumbnail_height"
+            android:layout_marginBottom="@dimen/thumbnail_margin"
+            android:layout_marginTop="@dimen/thumbnail_margin"
+            app:riv_corner_radius="@dimen/rounded_image_radius"/>
+    </RelativeLayout>
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"/>
-    </LinearLayout>
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </LinearLayout>

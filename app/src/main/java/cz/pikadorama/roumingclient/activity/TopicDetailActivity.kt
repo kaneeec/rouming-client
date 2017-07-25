@@ -17,19 +17,21 @@ class TopicDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_topic_detail)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true);
 
         val topic: Topic = intent.extras.toTopic()
-        thumbnail.loadImage(topic)
         upvotes.text = topic.upvotes.toString()
         downvotes.text = topic.downvotes.toString()
         comments.text = topic.comments.toString()
 
+        thumbnail.loadImage(topic)
         thumbnail.setOnClickListener {
             val intent = Intent(this, ImageFullscreenActivity::class.java)
             intent.putExtras(topic.toBundle())
             startActivity(intent)
         }
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true);
+        supportActionBar?.setTitle(topic.title)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
