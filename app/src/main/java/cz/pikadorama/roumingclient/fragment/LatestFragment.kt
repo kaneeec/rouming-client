@@ -1,7 +1,6 @@
 package cz.pikadorama.roumingclient.fragment
 
 import android.app.Fragment
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -27,9 +26,7 @@ class LatestFragment : Fragment() {
 
         val lv = root.findViewById(android.R.id.list) as ListView
         lv.setOnItemClickListener { _, _, position, id ->
-            val intent = Intent(activity, TopicDetailActivity::class.java)
-            intent.putExtras(adapter.getItem(position).toBundle())
-            startActivity(intent)
+            startActivity(TopicDetailActivity::class.java, adapter.getItem(position).toBundle())
         }
 
         return root
@@ -58,7 +55,7 @@ class LatestFragment : Fragment() {
         val topics = Topic.fromResponse(response)
         updateList(topics)
         refreshLayout.isRefreshing = false
-        updateTopicsInDatabase(topics, Topic.Type.LATEST)
+        updateTopicsInDatabase(topics)
     }
 
     private fun updateList(topics: List<Topic>) {

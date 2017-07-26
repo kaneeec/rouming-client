@@ -55,7 +55,7 @@ class TopFragment : Fragment() {
     private fun processWebResponse(response: String) {
         val topics = Topic.fromResponse(response)
         updateList(topics)
-        updateTopicsInDatabase(topics, Topic.Type.TOP)
+        updateTopicsInDatabase(topics)
         // FIXME: save last query configuration to set spinners on load
     }
 

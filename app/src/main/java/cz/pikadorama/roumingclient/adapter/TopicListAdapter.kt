@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter
 import cz.pikadorama.roumingclient.R
 import cz.pikadorama.roumingclient.data.Topic
 import cz.pikadorama.roumingclient.loadImage
+import kotlinx.android.synthetic.main.image_with_info.view.*
 import kotlinx.android.synthetic.main.item.view.*
 
 class TopicListAdapter : ArrayAdapter<Topic> {

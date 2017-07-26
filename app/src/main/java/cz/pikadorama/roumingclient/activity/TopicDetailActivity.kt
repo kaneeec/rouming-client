@@ -1,15 +1,11 @@
 package cz.pikadorama.roumingclient.activity
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
-import cz.pikadorama.roumingclient.R
+import cz.pikadorama.roumingclient.*
 import cz.pikadorama.roumingclient.data.Topic
-import cz.pikadorama.roumingclient.loadImage
-import cz.pikadorama.roumingclient.toBundle
-import cz.pikadorama.roumingclient.toTopic
-import kotlinx.android.synthetic.main.activity_topic_detail.*
+import kotlinx.android.synthetic.main.image_with_info.*
 
 
 class TopicDetailActivity : AppCompatActivity() {
@@ -24,14 +20,10 @@ class TopicDetailActivity : AppCompatActivity() {
         comments.text = topic.comments.toString()
 
         thumbnail.loadImage(topic)
-        thumbnail.setOnClickListener {
-            val intent = Intent(this, ImageFullscreenActivity::class.java)
-            intent.putExtras(topic.toBundle())
-            startActivity(intent)
-        }
+        thumbnail.setOnClickListener { startActivity(ImageFullscreenActivity::class.java, topic.toBundle()) }
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true);
-        supportActionBar?.setTitle(topic.title)
+        supportActionBar?.title = topic.title
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
