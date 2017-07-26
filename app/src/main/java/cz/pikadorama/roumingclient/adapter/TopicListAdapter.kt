@@ -20,11 +20,13 @@ class TopicListAdapter : ArrayAdapter<Topic> {
         val view = LayoutInflater.from(context).inflate(R.layout.item, parent, false)
         val topic = getItem(position)
 
-        view.thumbnail.loadImage(topic)
-        view.title.text = topic.title
-        view.upvotes.text = topic.upvotes.toString()
-        view.downvotes.text = topic.downvotes.toString()
-        view.comments.text = topic.comments.toString()
+        with(view) {
+            thumbnail.loadImage(topic)
+            title.text = topic.title
+            upvotes.text = topic.upvotes.toString()
+            downvotes.text = topic.downvotes.toString()
+            comments.text = topic.comments.toString()
+        }
 
         return view
     }

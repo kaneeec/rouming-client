@@ -16,27 +16,31 @@ class TopicQueryHelper : DaoQueryHelper<Topic> {
     }
 
     override fun cursorToObject(cursor: Cursor): Topic {
-        val id = cursor.getInt(cursor.getColumnIndexOrThrow(BaseColumns._ID))
-        val posted = cursor.getString(cursor.getColumnIndexOrThrow(Topic.COL_POSTED))
-        val comments = cursor.getInt(cursor.getColumnIndexOrThrow(Topic.COL_COMMENTS))
-        val upvotes = cursor.getInt(cursor.getColumnIndexOrThrow(Topic.COL_UPVOTES))
-        val downvotes = cursor.getInt(cursor.getColumnIndexOrThrow(Topic.COL_DOWNVOTES))
-        val link = cursor.getString(cursor.getColumnIndexOrThrow(Topic.COL_LINK))
-        val title = cursor.getString(cursor.getColumnIndexOrThrow(Topic.COL_TITLE))
-        val type = cursor.getString(cursor.getColumnIndexOrThrow(Topic.COL_TYPE))
-        return Topic(id, posted, comments, upvotes, downvotes, link, title, Topic.Type.valueOf(type))
+        with(cursor) {
+            val id = getInt(getColumnIndexOrThrow(BaseColumns._ID))
+            val posted = getString(getColumnIndexOrThrow(Topic.COL_POSTED))
+            val comments = getInt(getColumnIndexOrThrow(Topic.COL_COMMENTS))
+            val upvotes = getInt(getColumnIndexOrThrow(Topic.COL_UPVOTES))
+            val downvotes = getInt(getColumnIndexOrThrow(Topic.COL_DOWNVOTES))
+            val link = getString(getColumnIndexOrThrow(Topic.COL_LINK))
+            val title = getString(getColumnIndexOrThrow(Topic.COL_TITLE))
+            val type = getString(getColumnIndexOrThrow(Topic.COL_TYPE))
+            return Topic(id, posted, comments, upvotes, downvotes, link, title, Topic.Type.valueOf(type))
+        }
     }
 
     override fun objectToContentValues(obj: Topic): ContentValues {
         val cv = ContentValues()
-        cv.put(BaseColumns._ID, obj.id)
-        cv.put(Topic.COL_POSTED, obj.posted)
-        cv.put(Topic.COL_COMMENTS, obj.comments)
-        cv.put(Topic.COL_UPVOTES, obj.upvotes)
-        cv.put(Topic.COL_DOWNVOTES, obj.downvotes)
-        cv.put(Topic.COL_LINK, obj.link)
-        cv.put(Topic.COL_TITLE, obj.title)
-        cv.put(Topic.COL_TYPE, obj.type.name)
+        with(cv) {
+            put(BaseColumns._ID, obj.id)
+            put(Topic.COL_POSTED, obj.posted)
+            put(Topic.COL_COMMENTS, obj.comments)
+            put(Topic.COL_UPVOTES, obj.upvotes)
+            put(Topic.COL_DOWNVOTES, obj.downvotes)
+            put(Topic.COL_LINK, obj.link)
+            put(Topic.COL_TITLE, obj.title)
+            put(Topic.COL_TYPE, obj.type.name)
+        }
         return cv
     }
 
