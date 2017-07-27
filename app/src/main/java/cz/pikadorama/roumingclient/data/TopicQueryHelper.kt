@@ -25,7 +25,8 @@ class TopicQueryHelper : DaoQueryHelper<Topic> {
             val link = getString(getColumnIndexOrThrow(Topic.COL_LINK))
             val title = getString(getColumnIndexOrThrow(Topic.COL_TITLE))
             val type = getString(getColumnIndexOrThrow(Topic.COL_TYPE))
-            return Topic(id, posted, comments, upvotes, downvotes, link, title, Topic.Type.valueOf(type))
+            val faved = getString(getColumnIndexOrThrow(Topic.COL_FAVED)).toBoolean()
+            return Topic(id, posted, comments, upvotes, downvotes, link, title, Topic.Type.valueOf(type), faved)
         }
     }
 
@@ -40,6 +41,7 @@ class TopicQueryHelper : DaoQueryHelper<Topic> {
             put(Topic.COL_LINK, obj.link)
             put(Topic.COL_TITLE, obj.title)
             put(Topic.COL_TYPE, obj.type.name)
+            put(Topic.COL_FAVED, obj.faved.toString())
         }
         return cv
     }

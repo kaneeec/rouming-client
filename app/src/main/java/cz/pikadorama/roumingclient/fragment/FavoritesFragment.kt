@@ -5,25 +5,44 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ListView
 import cz.pikadorama.roumingclient.R
+import cz.pikadorama.roumingclient.activity.ImageFullscreenActivity
 import cz.pikadorama.roumingclient.adapter.TopicListAdapter
 import cz.pikadorama.roumingclient.dao
-import cz.pikadorama.roumingclient.data.Topic
+import cz.pikadorama.roumingclient.startActivity
+import cz.pikadorama.roumingclient.toBundle
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.favorites.*
+import kotlinx.android.synthetic.main.favorites.view.*
 
 class FavoritesFragment : Fragment() {
 
+    lateinit var adapter: TopicListAdapter
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.favorites, container, false)
+        val root =  inflater.inflate(R.layout.favorites, container, false)
+
+        root.refreshLayout.setOnRefreshListener({ showFavoriteTopics(); refreshLayout.isRefreshing = false })
+        root.refreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent)
+
+        val lv = root.findViewById(android.R.id.list) as ListView
+        lv.setOnItemClickListener { _, _, position, id ->
+            startActivity(ImageFullscreenActivity::class.java, adapter.getItem(position).toBundle())
+        }
+
+        return root
     }
 
     override fun onResume() {
         super.onResume()
+        activity.toolbar.setTitle(R.string.title_favorites)
         showFavoriteTopics()
     }
 
     private fun showFavoriteTopics() {
-        list.adapter = TopicListAdapter(activity, dao().findAll().filter { it.type == Topic.Type.FAVORITES })
+        this.adapter = TopicListAdapter(activity, dao().findAll().filter { it.faved })
+        list.adapter = this.adapter
     }
 
 }

@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Rouming Client</string>
-    <string name="title_activity_main">MainActivity</string>
     <string name="title_latest">Latest</string>
     <string name="title_top">Top</string>
     <string name="title_favorites">Favorites</string>

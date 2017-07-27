@@ -18,14 +18,15 @@ data class Topic(
         @DbColumn(name = COL_DOWNVOTES, type = DbDataType.INTEGER) var downvotes: Int,
         @DbColumn(name = COL_LINK, type = DbDataType.TEXT) var link: String,
         @DbColumn(name = COL_TITLE, type = DbDataType.TEXT) var title: String,
-        @DbColumn(name = COL_TYPE, type = DbDataType.TEXT) var type: Type) {
+        @DbColumn(name = COL_TYPE, type = DbDataType.TEXT) var type: Type,
+        @DbColumn(name = COL_FAVED, type = DbDataType.TEXT) var faved: Boolean) {
 
     enum class Type(val firstColumnIndex: Int, val urlPrefix: String) {
-        LATEST(1, ""), TOP(0, "http://www.rouming.cz/"), FAVORITES(0, "")
+        LATEST(1, ""), TOP(0, "http://www.rouming.cz/")
     }
 
-    constructor(posted: String, comments: Int, upvotes: Int, downvotes: Int, link: String, title: String, type: Type)
-            : this(null, posted, comments, upvotes, downvotes, link, title, type)
+    constructor(posted: String, comments: Int, upvotes: Int, downvotes: Int, link: String, title: String, type: Type,
+                faved: Boolean = false) : this(null, posted, comments, upvotes, downvotes, link, title, type, faved)
 
     fun imageDirectLink(): String = link.replace("roumingShow.php?file=", "upload/")
 
@@ -37,6 +38,7 @@ data class Topic(
         const val COL_LINK = "link"
         const val COL_TITLE = "title"
         const val COL_TYPE = "type"
+        const val COL_FAVED = "faved"
 
         fun fromRowElement(row: Element, type: Type): Topic {
             val columns = row.getElementsByTag("td")

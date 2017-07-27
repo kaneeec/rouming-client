@@ -8,10 +8,11 @@ import android.view.ViewGroup
 import android.widget.ListView
 import com.android.volley.Response
 import cz.pikadorama.roumingclient.*
-import cz.pikadorama.roumingclient.activity.TopicDetailActivity
+import cz.pikadorama.roumingclient.activity.ImageFullscreenActivity
 import cz.pikadorama.roumingclient.adapter.TopicListAdapter
 import cz.pikadorama.roumingclient.data.Topic
 import cz.pikadorama.roumingclient.http.RoumingHttpClient
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.latest.*
 import kotlinx.android.synthetic.main.latest.view.*
 
@@ -26,7 +27,7 @@ class LatestFragment : Fragment() {
 
         val lv = root.findViewById(android.R.id.list) as ListView
         lv.setOnItemClickListener { _, _, position, id ->
-            startActivity(TopicDetailActivity::class.java, adapter.getItem(position).toBundle())
+            startActivity(ImageFullscreenActivity::class.java, adapter.getItem(position).toBundle())
         }
 
         return root
@@ -34,6 +35,7 @@ class LatestFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        activity.toolbar.setTitle(R.string.title_latest)
         showLatestTopics()
     }
 
@@ -53,9 +55,9 @@ class LatestFragment : Fragment() {
 
     private fun processWebResponse(response: String) {
         val topics = Topic.fromResponse(response)
+        updateTopicsInDatabase(topics)
         updateList(topics)
         refreshLayout.isRefreshing = false
-        updateTopicsInDatabase(topics)
     }
 
     private fun updateList(topics: List<Topic>) {

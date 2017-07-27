@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import cz.pikadorama.roumingclient.R
+import cz.pikadorama.roumingclient.dao
 import cz.pikadorama.roumingclient.data.Topic
-import cz.pikadorama.roumingclient.loadImage
-import kotlinx.android.synthetic.main.image_with_info.view.*
+import cz.pikadorama.roumingclient.loadFrom
 import kotlinx.android.synthetic.main.item.view.*
 
 class TopicListAdapter : ArrayAdapter<Topic> {
@@ -21,11 +21,22 @@ class TopicListAdapter : ArrayAdapter<Topic> {
         val topic = getItem(position)
 
         with(view) {
-            thumbnail.loadImage(topic)
+            thumbnail.loadFrom(topic)
             title.text = topic.title
             upvotes.text = topic.upvotes.toString()
             downvotes.text = topic.downvotes.toString()
-            comments.text = topic.comments.toString()
+
+            star.setImageResource(if (topic.faved) R.drawable.faved_full else R.drawable.faved_empty)
+            star.tag = topic.faved
+            star.setOnClickListener {
+                val faved = !(star.tag as Boolean)
+
+                star.tag = faved
+                topic.faved = faved
+                dao().update(topic)
+
+                star.setImageResource(if (faved) R.drawable.faved_full else R.drawable.faved_empty)
+            }
         }
 
         return view
