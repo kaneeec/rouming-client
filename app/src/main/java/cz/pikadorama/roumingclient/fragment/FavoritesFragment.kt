@@ -2,6 +2,7 @@ package cz.pikadorama.roumingclient.fragment
 
 import android.app.Fragment
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,22 +14,23 @@ import cz.pikadorama.roumingclient.dao
 import cz.pikadorama.roumingclient.startActivity
 import cz.pikadorama.roumingclient.toBundle
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.favorites.*
-import kotlinx.android.synthetic.main.favorites.view.*
+import kotlinx.android.synthetic.main.fragment_favorites.*
+import kotlinx.android.synthetic.main.fragment_favorites.view.*
 
 class FavoritesFragment : Fragment() {
 
-    lateinit var adapter: TopicListAdapter
+    var listState: Parcelable? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val root =  inflater.inflate(R.layout.favorites, container, false)
+        val root = inflater.inflate(R.layout.fragment_favorites, container, false)
 
         root.refreshLayout.setOnRefreshListener({ showFavoriteTopics(); refreshLayout.isRefreshing = false })
         root.refreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent)
 
         val lv = root.findViewById(android.R.id.list) as ListView
         lv.setOnItemClickListener { _, _, position, id ->
-            startActivity(ImageFullscreenActivity::class.java, adapter.getItem(position).toBundle())
+            startActivity(ImageFullscreenActivity::class.java,
+                          (lv.adapter as TopicListAdapter).getItem(position).toBundle())
         }
 
         return root
@@ -38,11 +40,16 @@ class FavoritesFragment : Fragment() {
         super.onResume()
         activity.toolbar.setTitle(R.string.title_favorites)
         showFavoriteTopics()
+        listState?.let { list.onRestoreInstanceState(listState) }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        listState = list.onSaveInstanceState()
     }
 
     private fun showFavoriteTopics() {
-        this.adapter = TopicListAdapter(activity, dao().findAll().filter { it.faved })
-        list.adapter = this.adapter
+        list.adapter = TopicListAdapter(activity, dao().findAll().filter { it.faved })
     }
 
 }

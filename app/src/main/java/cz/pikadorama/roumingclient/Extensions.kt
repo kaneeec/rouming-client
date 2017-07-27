@@ -10,7 +10,6 @@ import android.os.Bundle
 import android.widget.ImageView
 import android.widget.Toast
 import com.squareup.okhttp.OkHttpClient
-import com.squareup.picasso.OkHttpDownloader
 import com.squareup.picasso.Picasso
 import cz.pikadorama.roumingclient.data.Topic
 import cz.pikadorama.simpleorm.DaoManager
@@ -64,12 +63,20 @@ fun Bundle.toTopic(): Topic {
 fun ImageView.loadFrom(topic: Topic) {
     val client: OkHttpClient = OkHttpClient()
     client.setProxy(Proxy(Proxy.Type.HTTP, InetSocketAddress.createUnresolved("emea-proxy.uk.oracle.com", 80)))
+    loadFrom(this, context, topic.imageDirectLinks())
+}
 
-//    Picasso.with(context)
-    Picasso.Builder(context).downloader(OkHttpDownloader(client)).build()
-            .load(Uri.parse(topic.imageDirectLink()))
+fun loadFrom(image: ImageView, context: Context, links: List<String>) {
+    Picasso.Builder(context).listener { picasso, _, _ ->
+        if (links.size > 1) {
+            loadFrom(image, context, links.drop(1))
+        } else {
+            picasso.cancelRequest(image)
+        }
+    }.build()
+            .load(Uri.parse(links.first()))
             .fit().centerInside()
             .placeholder(R.drawable.image_loading)
-            .error(R.drawable.error_image_loading)
-            .into(this)
+            .error(R.drawable.image_loading_error)
+            .into(image)
 }

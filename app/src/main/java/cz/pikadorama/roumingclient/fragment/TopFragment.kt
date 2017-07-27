@@ -2,6 +2,7 @@ package cz.pikadorama.roumingclient.fragment
 
 import android.app.Fragment
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,29 +15,30 @@ import cz.pikadorama.roumingclient.adapter.TopicListAdapter
 import cz.pikadorama.roumingclient.data.Topic
 import cz.pikadorama.roumingclient.http.RoumingHttpClient
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.top.*
-import kotlinx.android.synthetic.main.top.view.*
+import kotlinx.android.synthetic.main.fragment_top.*
+import kotlinx.android.synthetic.main.fragment_top.view.*
 
 
 class TopFragment : Fragment() {
 
-    lateinit var adapter: TopicListAdapter
+    var listState: Parcelable? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val root = inflater.inflate(R.layout.top, container, false)
+        val root = inflater.inflate(R.layout.fragment_top, container, false)
 
         root.search.setOnClickListener {
             fetchTopicsFromWeb(root.limit.selectedItemPosition + 1, root.interval.selectedItemPosition + 1)
         }
 
-        root.limit.adapter = ArrayAdapter.createFromResource(activity, R.array.limit,
-                                                             android.R.layout.simple_spinner_dropdown_item)
-        root.interval.adapter = ArrayAdapter.createFromResource(activity, R.array.interval,
-                                                                android.R.layout.simple_spinner_dropdown_item)
+        root.limit.adapter = ArrayAdapter.createFromResource(activity, R.array.limit, R.layout.spinner_item)
+        (root.limit.adapter as ArrayAdapter<String>).setDropDownViewResource(R.layout.spinner_dropdown)
+        root.interval.adapter = ArrayAdapter.createFromResource(activity, R.array.interval, R.layout.spinner_item)
+        (root.interval.adapter as ArrayAdapter<String>).setDropDownViewResource(R.layout.spinner_dropdown)
 
         val lv = root.findViewById(android.R.id.list) as ListView
         lv.setOnItemClickListener { _, _, position, id ->
-            startActivity(ImageFullscreenActivity::class.java, adapter.getItem(position).toBundle())
+            startActivity(ImageFullscreenActivity::class.java,
+                          (lv.adapter as TopicListAdapter).getItem(position).toBundle())
         }
 
         return root
@@ -46,10 +48,16 @@ class TopFragment : Fragment() {
         super.onResume()
         activity.toolbar.setTitle(R.string.title_top)
         showTopTopics()
+        listState?.let { list.onRestoreInstanceState(listState) }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        listState = list.onSaveInstanceState()
     }
 
     private fun fetchTopicsFromWeb(limit: Int, interval: Int) {
-        RoumingHttpClient(activity).fetchTop(limit, interval, Response.Listener { processWebResponse(it) },
+        RoumingHttpClient(activity).fetchTop(limit, interval, Response.Listener<String> { processWebResponse(it) },
                                              Response.ErrorListener { toast(R.string.error_load_topics) })
     }
 
@@ -69,8 +77,7 @@ class TopFragment : Fragment() {
     }
 
     private fun updateList(topics: List<Topic>) {
-        this.adapter = TopicListAdapter(activity, topics)
-        list.adapter = this.adapter
+        list.adapter = TopicListAdapter(activity, topics)
     }
 
 }

@@ -6,6 +6,7 @@ import com.android.volley.Response
 import com.android.volley.toolbox.HurlStack
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import cz.pikadorama.roumingclient.data.Topic
 import java.net.HttpURLConnection
 import java.net.InetSocketAddress
 import java.net.Proxy
@@ -30,8 +31,13 @@ class RoumingHttpClient(val context: Context) {
         createRequestQueue().add(request)
     }
 
-    private fun createRequestQueue() = Volley.newRequestQueue(context, ProxyStack())
-//    private fun createRequestQueue() = Volley.newRequestQueue(context)
+    fun fetchDetails(topic: Topic, onSuccess: Response.Listener<String>, onError: Response.ErrorListener) {
+        val request = StringRequest(Request.Method.GET, topic.link, onSuccess, onError)  // FIXME: encoding issue
+        createRequestQueue().add(request)
+    }
+
+//    private fun createRequestQueue() = Volley.newRequestQueue(context, ProxyStack())
+    private fun createRequestQueue() = Volley.newRequestQueue(context)
 
     inner class ProxyStack : HurlStack() {
         override fun createConnection(url: URL): HttpURLConnection {

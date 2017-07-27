@@ -1,13 +1,22 @@
 <resources>
-    <string name="app_name">Rouming Client</string>
-    <string name="title_latest">Latest</string>
-    <string name="title_top">Top</string>
-    <string name="title_favorites">Favorites</string>
+    <string name="app_name">Roumenův Rouming</string>
+    <string name="title_latest">Poslední příspěvky</string>
+    <string name="title_top">Nejlepší příspěvky</string>
+    <string name="title_favorites">Oblíbené</string>
 
-    <string name="error_load_topics">Cannot fetch topics. Check your internet connection.</string>
+    <string name="error_load_topics">Nelze načíst příspěvky. Zkontrolujte připojení k internetu.</string>
 
-    <string name="navigation_open">Open navigation</string>
-    <string name="navigation_close">Close navigation</string>
+    <string name="navigation_open">Otevřít menu</string>
+    <string name="navigation_close">Zavřít menu</string>
+
+    <string name="top_search_for">za</string>
+    <string name="top_search_show">Ukaž nejlepších</string>
+
+    <string name="empty_list_no_faves">Zatím nemáš žádné oblíbené příspěvky</string>
+    <string name="empty_list_latest">Počkej, než se načtou příspěvky ...</string>
+    <string name="empty_list_top">Tip: zkus hledání ...</string>
+    <string name="comments">Komentáře</string>
+    <string name="close">Zavřít</string>
 
     <string-array name="limit">
         <item>30</item>
@@ -16,12 +25,12 @@
         <item>250</item>
     </string-array>
     <string-array name="interval">
-        <item>Last day</item>
-        <item>Last week</item>
-        <item>Last month</item>
-        <item>Last 3 months</item>
-        <item>Last 6 months</item>
-        <item>Last year</item>
-        <item>All time</item>
+        <item>poslední den</item>
+        <item>poslední týden</item>
+        <item>poslední měsíc</item>
+        <item>poslední 3 měsíce</item>
+        <item>posledních 6 měsíců</item>
+        <item>poslední rok</item>
+        <item>vždy</item>
     </string-array>
 </resources>

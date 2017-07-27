@@ -8,9 +8,9 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:name=".OrmEnabledApplication"
         android:allowBackup="true"
-        android:icon="@drawable/icon_launcher"
+        android:icon="@drawable/launcher"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/icon_launcher"
+        android:roundIcon="@drawable/launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
@@ -25,9 +25,7 @@
         </activity>
         <activity
             android:name=".activity.ImageFullscreenActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

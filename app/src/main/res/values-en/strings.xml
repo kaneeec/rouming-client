@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Rouming Client</string>
+    <string name="title_favorites">Favorites</string>
+    <string name="title_latest">Latest</string>
+    <string name="title_top">Top</string>
+
+    <string name="error_load_topics">Cannot fetch topics. Check your internet connection.</string>
+
+    <string name="navigation_open">Open navigation</string>
+    <string name="navigation_close">Close navigation</string>
+
+    <string name="top_search_for">for</string>
+    <string name="top_search_show">Show top</string>
+
+    <string name="empty_list_no_faves">No favorites so far</string>
+    <string name="empty_list_latest">Wait for topics to load ...</string>
+    <string name="empty_list_top">Hint: try the searching feature ...</string>
+    <string name="comments">Komentáře</string>
+    <string name="close">Zavřít</string>
+
+    <string-array name="interval">
+        <item>last day</item>
+        <item>last week</item>
+        <item>last month</item>
+        <item>last 3 months</item>
+        <item>last 6 months</item>
+        <item>last year</item>
+        <item>all time</item>
+    </string-array>
+</resources>

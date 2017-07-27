@@ -2,6 +2,7 @@ package cz.pikadorama.roumingclient.fragment
 
 import android.app.Fragment
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,21 +14,21 @@ import cz.pikadorama.roumingclient.adapter.TopicListAdapter
 import cz.pikadorama.roumingclient.data.Topic
 import cz.pikadorama.roumingclient.http.RoumingHttpClient
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.latest.*
-import kotlinx.android.synthetic.main.latest.view.*
+import kotlinx.android.synthetic.main.fragment_latest.*
+import kotlinx.android.synthetic.main.fragment_latest.view.*
 
 class LatestFragment : Fragment() {
 
-    lateinit var adapter: TopicListAdapter
+    var listState: Parcelable? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val root = inflater.inflate(R.layout.latest, container, false)
+        val root = inflater.inflate(R.layout.fragment_latest, container, false)
         root.refreshLayout.setOnRefreshListener({ fetchTopicsFromWeb() })
         root.refreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent)
 
         val lv = root.findViewById(android.R.id.list) as ListView
         lv.setOnItemClickListener { _, _, position, id ->
-            startActivity(ImageFullscreenActivity::class.java, adapter.getItem(position).toBundle())
+            startActivity(ImageFullscreenActivity::class.java, (lv.adapter as TopicListAdapter).getItem(position).toBundle())
         }
 
         return root
@@ -37,10 +38,16 @@ class LatestFragment : Fragment() {
         super.onResume()
         activity.toolbar.setTitle(R.string.title_latest)
         showLatestTopics()
+        listState?.let { list.onRestoreInstanceState(listState) }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        listState = list.onSaveInstanceState()
     }
 
     private fun fetchTopicsFromWeb() {
-        RoumingHttpClient(activity).fetchLatest(Response.Listener { processWebResponse(it) },
+        RoumingHttpClient(activity).fetchLatest(Response.Listener<String> { processWebResponse(it) },
                                                 Response.ErrorListener { toast(R.string.error_load_topics) })
     }
 
@@ -61,8 +68,7 @@ class LatestFragment : Fragment() {
     }
 
     private fun updateList(topics: List<Topic>) {
-        this.adapter = TopicListAdapter(activity, topics)
-        list.adapter = this.adapter
+        list.adapter = TopicListAdapter(activity, topics)
     }
 
 }

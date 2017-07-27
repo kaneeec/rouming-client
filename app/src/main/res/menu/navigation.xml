@@ -4,17 +4,17 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/latest"
-            android:icon="@drawable/home"
+            android:icon="@drawable/drawer_icon_home"
             android:title="@string/title_latest" />
 
         <item
             android:id="@+id/top"
-            android:icon="@drawable/star"
+            android:icon="@drawable/drawer_icon_top"
             android:title="@string/title_top"/>
 
         <item
             android:id="@+id/favorites"
-            android:icon="@drawable/favorite"
+            android:icon="@drawable/drawer_icon_favorite"
             android:title="@string/title_favorites"/>
     </group>
 

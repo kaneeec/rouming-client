@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -13,15 +14,32 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:background="@color/colorPrimary"
+            android:background="#EEEEEE"
             android:elevation="4dp"
             android:gravity="right"
-            android:padding="@dimen/list_view_padding">
+            android:padding="@dimen/default_padding_margin">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="@dimen/default_padding_margin"
+                android:gravity="center_vertical"
+                android:text="@string/top_search_show"
+                android:textSize="@dimen/item_desc_font_size"/>
 
             <Spinner
                 android:id="@+id/limit"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/default_padding_margin"
+                android:layout_marginRight="@dimen/default_padding_margin"
+                android:gravity="center_vertical"
+                android:text="@string/top_search_for"
+                android:textSize="@dimen/item_desc_font_size"/>
 
             <Spinner
                 android:id="@+id/interval"
@@ -32,10 +50,9 @@
                 android:id="@+id/search"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/list_view_padding"
+                android:layout_marginLeft="@dimen/default_padding_margin"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:padding="@dimen/list_view_padding"
-                android:src="@drawable/search"/>
+                android:src="@drawable/bar_search"/>
 
         </LinearLayout>
 

@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/list_view_padding">
+    android:padding="@dimen/default_padding_margin">
 
     <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/thumbnail"
@@ -20,8 +20,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/list_view_padding"
-        android:layout_toLeftOf="@+id/star"
+        android:layout_marginLeft="@dimen/default_padding_margin"
+        android:layout_toLeftOf="@+id/actions"
         android:layout_toRightOf="@+id/thumbnail"
         android:gravity="center_vertical"
         android:orientation="vertical">
@@ -34,13 +34,38 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/list_view_padding">
+            android:layout_marginTop="@dimen/default_padding_margin">
+
+            <RelativeLayout
+                android:id="@+id/commentsLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginRight="@dimen/default_padding_margin"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:id="@+id/commentsIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginRight="@dimen/item_desc_icon_margin"
+                    android:src="@drawable/topic_comments_sum"/>
+
+                <TextView
+                    android:id="@+id/comments"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/commentsIcon"/>
+            </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/upvotesLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="@dimen/default_padding_margin"
+                android:layout_marginRight="@dimen/default_padding_margin"
+                android:layout_toRightOf="@+id/commentsLayout"
                 android:gravity="center_vertical">
 
                 <ImageView
@@ -49,7 +74,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_marginRight="@dimen/item_desc_icon_margin"
-                    android:src="@drawable/upvotes"/>
+                    android:src="@drawable/topic_upvotes"/>
 
                 <TextView
                     android:id="@+id/upvotes"
@@ -61,7 +86,7 @@
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/list_view_padding"
+                android:layout_marginLeft="@dimen/default_padding_margin"
                 android:layout_toRightOf="@+id/upvotesLayout"
                 android:gravity="center_vertical">
 
@@ -70,7 +95,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/item_desc_icon_margin"
-                    android:src="@drawable/downvotes"/>
+                    android:src="@drawable/topic_downvotes"/>
 
                 <TextView
                     android:id="@+id/downvotes"
@@ -81,11 +106,23 @@
         </RelativeLayout>
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/star"
+    <LinearLayout
+        android:id="@+id/actions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"/>
+        android:layout_centerInParent="true"
+        android:orientation="horizontal">
 
+        <ImageView
+            android:id="@+id/showComments"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/topic_comments"/>
+
+        <ImageView
+            android:id="@+id/faveit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
 </RelativeLayout>

@@ -28,7 +28,10 @@ data class Topic(
     constructor(posted: String, comments: Int, upvotes: Int, downvotes: Int, link: String, title: String, type: Type,
                 faved: Boolean = false) : this(null, posted, comments, upvotes, downvotes, link, title, type, faved)
 
-    fun imageDirectLink(): String = link.replace("roumingShow.php?file=", "upload/")
+    fun imageDirectLinks(): List<String> = listOf(imageDirectLink(link, "upload"),
+                                                  imageDirectLink(link, "archived"),
+                                                  imageDirectLink(link, "signed"))
+    private fun imageDirectLink(link: String, opt: String): String = link.replace("roumingShow.php?file=", "$opt/")
 
     companion object {
         const val COL_POSTED = "posted"

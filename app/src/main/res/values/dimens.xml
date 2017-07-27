@@ -5,11 +5,10 @@
     <dimen name="thumbnail_width">50dp</dimen>
     <dimen name="thumbnail_height">50dp</dimen>
 
-    <dimen name="list_view_padding">8dp</dimen>
+    <dimen name="default_padding_margin">8dp</dimen>
 
     <dimen name="rounded_image_radius">4dp</dimen>
 
-    <dimen name="item_title_font_size">24dp</dimen>
     <dimen name="item_desc_font_size">16dp</dimen>
     <dimen name="item_desc_icon_margin">4dp</dimen>
 </resources>
