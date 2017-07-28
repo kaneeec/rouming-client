@@ -22,6 +22,12 @@
     <string name="share">Share topic</string>
     <string name="no_comments">So far there are no comments here</string>
 
+    <string-array name="limit">
+        <item>30</item>
+        <item>50</item>
+        <item>100</item>
+        <item>250</item>
+    </string-array>
     <string-array name="interval">
         <item>last day</item>
         <item>last week</item>
