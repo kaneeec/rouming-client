@@ -34,9 +34,11 @@ private fun toast(messageResId: Int, context: Context) = Toast.makeText(context,
 fun Context.startActivity(activityClass: Class<out Activity>, bundle: Bundle = Bundle()) {
     startActivity(activityClass, bundle, this)
 }
+
 fun Fragment.startActivity(activityClass: Class<out Activity>, bundle: Bundle = Bundle()) {
     startActivity(activityClass, bundle, this.activity)
 }
+
 private fun startActivity(activityClass: Class<out Activity>, bundle: Bundle, context: Context) {
     val intent = Intent(context, activityClass)
     intent.putExtras(bundle)
@@ -45,9 +47,10 @@ private fun startActivity(activityClass: Class<out Activity>, bundle: Bundle, co
 
 fun Fragment.sendHttpRequest(request: StringRequest) = sendHttpRequest(activity, request)
 fun ArrayAdapter<out Any>.sendHttpRequest(request: StringRequest) = sendHttpRequest(context, request)
-private fun  sendHttpRequest(context: Context, request: StringRequest) {
+private fun sendHttpRequest(context: Context, request: StringRequest) {
     Volley.newRequestQueue(context, ProxyStack()).add(request)
 }
+
 class ProxyStack : HurlStack() {
     override fun createConnection(url: URL): HttpURLConnection {
         val proxy = Proxy(Proxy.Type.HTTP, InetSocketAddress.createUnresolved("emea-proxy.uk.oracle.com", 80))
@@ -80,6 +83,7 @@ fun Bundle.toTopic(): Topic {
 fun ImageView.loadFrom(topic: Topic) {
     loadFrom(this, context, topic.imageDirectLinks())
 }
+
 fun loadFrom(image: ImageView, context: Context, links: List<String>) {
     val client: OkHttpClient = OkHttpClient()
     client.setProxy(Proxy(Proxy.Type.HTTP, InetSocketAddress.createUnresolved("emea-proxy.uk.oracle.com", 80)))

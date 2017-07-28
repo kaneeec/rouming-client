@@ -93,7 +93,6 @@ class TopicListAdapter : ArrayAdapter<Topic> {
             } catch (e: UnsupportedEncodingException) {
                 return Response.error(ParseError(e))
             }
-
         }
     }
 }

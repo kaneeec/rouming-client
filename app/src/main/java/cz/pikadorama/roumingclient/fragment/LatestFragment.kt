@@ -29,7 +29,8 @@ class LatestFragment : Fragment() {
 
         val lv = root.findViewById(android.R.id.list) as ListView
         lv.setOnItemClickListener { _, _, position, id ->
-            startActivity(ImageFullscreenActivity::class.java, (lv.adapter as TopicListAdapter).getItem(position).toBundle())
+            startActivity(ImageFullscreenActivity::class.java,
+                          (lv.adapter as TopicListAdapter).getItem(position).toBundle())
         }
 
         return root

@@ -31,6 +31,7 @@ data class Topic(
     fun imageDirectLinks(): List<String> = listOf(imageDirectLink(link, "upload"),
                                                   imageDirectLink(link, "archived"),
                                                   imageDirectLink(link, "signed"))
+
     private fun imageDirectLink(link: String, opt: String): String = link.replace("roumingShow.php?file=", "$opt/")
 
     companion object {
