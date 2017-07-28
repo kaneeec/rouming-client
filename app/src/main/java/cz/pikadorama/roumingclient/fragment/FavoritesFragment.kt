@@ -24,7 +24,7 @@ class FavoritesFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val root = inflater.inflate(R.layout.fragment_favorites, container, false)
 
-        root.refreshLayout.setOnRefreshListener({ showFavoriteTopics(); refreshLayout.isRefreshing = false })
+        root.refreshLayout.setOnRefreshListener({ updateList() })
         root.refreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent)
 
         val lv = root.findViewById(android.R.id.list) as ListView
@@ -39,7 +39,8 @@ class FavoritesFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         activity.toolbar.setTitle(R.string.title_favorites)
-        showFavoriteTopics()
+        refreshLayout.isRefreshing = true
+        updateList()
         listState?.let { list.onRestoreInstanceState(listState) }
     }
 
@@ -48,8 +49,9 @@ class FavoritesFragment : Fragment() {
         listState = list.onSaveInstanceState()
     }
 
-    private fun showFavoriteTopics() {
+    private fun updateList() {
         list.adapter = TopicListAdapter(activity, dao().findAll().filter { it.faved })
+        refreshLayout.isRefreshing = false
     }
 
 }

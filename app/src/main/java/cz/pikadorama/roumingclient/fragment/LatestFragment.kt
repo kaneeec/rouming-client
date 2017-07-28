@@ -39,6 +39,7 @@ class LatestFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         activity.toolbar.setTitle(R.string.title_latest)
+        refreshLayout.isRefreshing = true
         showLatestTopics()
         listState?.let { list.onRestoreInstanceState(listState) }
     }
@@ -52,10 +53,7 @@ class LatestFragment : Fragment() {
         val url = "http://www.rouming.cz"
         val request = StringRequest(Request.Method.GET, url, Response.Listener<String> {
             processWebResponse(it)
-            refreshLayout.isRefreshing = false
         }, Response.ErrorListener {
-            toast(R.string.error_load_topics)
-            refreshLayout.isRefreshing = false
         })
         sendHttpRequest(request)
     }
@@ -77,6 +75,7 @@ class LatestFragment : Fragment() {
 
     private fun updateList(topics: List<Topic>) {
         list.adapter = TopicListAdapter(activity, topics)
+        refreshLayout.isRefreshing = false
     }
 
 }

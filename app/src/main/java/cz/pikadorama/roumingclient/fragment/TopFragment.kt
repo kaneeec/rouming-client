@@ -100,8 +100,8 @@ class TopFragment : Fragment() {
 
     private fun processWebResponse(response: String) {
         val topics = Topic.fromResponse(response)
-        updateList(topics)
         updateTopicsInDatabase(topics)
+        updateList(topics)
     }
 
     private fun updateList(topics: List<Topic>) {
