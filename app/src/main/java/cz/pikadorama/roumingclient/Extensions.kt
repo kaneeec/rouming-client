@@ -31,10 +31,6 @@ fun Fragment.toast(messageResId: Int) = toast(messageResId, this.activity)
 private fun toast(messageResId: Int, context: Context) = Toast.makeText(context, messageResId,
                                                                         Toast.LENGTH_SHORT).show()
 
-fun Context.startActivity(activityClass: Class<out Activity>, bundle: Bundle = Bundle()) {
-    startActivity(activityClass, bundle, this)
-}
-
 fun Fragment.startActivity(activityClass: Class<out Activity>, bundle: Bundle = Bundle()) {
     startActivity(activityClass, bundle, this.activity)
 }
