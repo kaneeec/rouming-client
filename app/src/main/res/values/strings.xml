@@ -10,13 +10,16 @@
     <string name="navigation_close">Zavřít menu</string>
 
     <string name="top_search_for">za</string>
-    <string name="top_search_show">Ukaž nejlepších</string>
+    <string name="top_search_show">Nej</string>
 
     <string name="empty_list_no_faves">Zatím nemáš žádné oblíbené příspěvky</string>
     <string name="empty_list_latest">Počkej, než se načtou příspěvky ...</string>
     <string name="empty_list_top">Tip: zkus hledání ...</string>
+
     <string name="comments">Komentáře</string>
     <string name="close">Zavřít</string>
+    <string name="share">Sdílet příspěvek</string>
+    <string name="no_comments">K tomuto příspěvku nejsou zatím žádné komentáře</string>
 
     <string-array name="limit">
         <item>30</item>

@@ -1,6 +1,7 @@
 package cz.pikadorama.roumingclient.fragment
 
 import android.app.Fragment
+import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
@@ -22,19 +23,19 @@ import kotlinx.android.synthetic.main.fragment_top.view.*
 
 class TopFragment : Fragment() {
 
+    val PREF_LIMIT = "limit"
+    val PREF_INTERVAL = "interval"
+
     var listState: Parcelable? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val root = inflater.inflate(R.layout.fragment_top, container, false)
 
         root.search.setOnClickListener {
-            fetchTopicsFromWeb(root.limit.selectedItemPosition + 1, root.interval.selectedItemPosition + 1)
+            fetchTopicsFromWeb(root.limit.selectedItemPosition, root.interval.selectedItemPosition)
         }
 
-        root.limit.adapter = ArrayAdapter.createFromResource(activity, R.array.limit, R.layout.spinner_item)
-        (root.limit.adapter as ArrayAdapter<String>).setDropDownViewResource(R.layout.spinner_dropdown)
-        root.interval.adapter = ArrayAdapter.createFromResource(activity, R.array.interval, R.layout.spinner_item)
-        (root.interval.adapter as ArrayAdapter<String>).setDropDownViewResource(R.layout.spinner_dropdown)
+        initSpinners(root)
 
         val lv = root.findViewById(android.R.id.list) as ListView
         lv.setOnItemClickListener { _, _, position, id ->
@@ -43,6 +44,18 @@ class TopFragment : Fragment() {
         }
 
         return root
+    }
+
+    private fun initSpinners(root: View) {
+        val prefs = activity.getPreferences(Context.MODE_PRIVATE)
+
+        root.limit.adapter = ArrayAdapter.createFromResource(activity, R.array.limit, R.layout.spinner_item)
+        (root.limit.adapter as ArrayAdapter<String>).setDropDownViewResource(R.layout.spinner_dropdown)
+        root.limit.setSelection(prefs.getInt(PREF_LIMIT, 0))
+
+        root.interval.adapter = ArrayAdapter.createFromResource(activity, R.array.interval, R.layout.spinner_item)
+        (root.interval.adapter as ArrayAdapter<String>).setDropDownViewResource(R.layout.spinner_dropdown)
+        root.interval.setSelection(prefs.getInt(PREF_INTERVAL, 0))
     }
 
     override fun onResume() {
@@ -62,11 +75,20 @@ class TopFragment : Fragment() {
         val request = object : StringRequest(Request.Method.POST, url,
                                              Response.Listener<String> { processWebResponse(it) },
                                              Response.ErrorListener { toast(R.string.error_load_topics) }) {
-            override fun getParams(): Map<String, String> = mapOf(Pair("count", limit.toString()),
+            override fun getParams(): Map<String, String> = mapOf(Pair("count", (limit + 1).toString()),
                                                                   Pair("operation", "1"),
-                                                                  Pair("interval", interval.toString()))
+                                                                  Pair("interval", (interval + 1).toString()))
         }
         sendHttpRequest(request)
+        saveLastSearchParams(limit, interval)
+    }
+
+    private fun saveLastSearchParams(limit: Int, interval: Int) {
+        val prefs = activity.getPreferences(Context.MODE_PRIVATE)
+        val editor = prefs.edit()
+        editor.putInt(PREF_LIMIT, limit)
+        editor.putInt(PREF_INTERVAL, interval)
+        editor.commit()
     }
 
     private fun showTopTopics() {
@@ -80,8 +102,6 @@ class TopFragment : Fragment() {
         val topics = Topic.fromResponse(response)
         updateList(topics)
         updateTopicsInDatabase(topics)
-        // FIXME: save last query configuration to set spinners on load
-        // FIXME: spinners black color -> white
     }
 
     private fun updateList(topics: List<Topic>) {

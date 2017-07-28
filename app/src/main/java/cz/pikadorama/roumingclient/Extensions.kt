@@ -10,18 +10,11 @@ import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.Toast
-import com.android.volley.toolbox.HurlStack
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-import com.squareup.okhttp.OkHttpClient
-import com.squareup.picasso.OkHttpDownloader
 import com.squareup.picasso.Picasso
 import cz.pikadorama.roumingclient.data.Topic
 import cz.pikadorama.simpleorm.DaoManager
-import java.net.HttpURLConnection
-import java.net.InetSocketAddress
-import java.net.Proxy
-import java.net.URL
 
 
 const val BUNDLE_KEY = "data"
@@ -44,14 +37,7 @@ private fun startActivity(activityClass: Class<out Activity>, bundle: Bundle, co
 fun Fragment.sendHttpRequest(request: StringRequest) = sendHttpRequest(activity, request)
 fun ArrayAdapter<out Any>.sendHttpRequest(request: StringRequest) = sendHttpRequest(context, request)
 private fun sendHttpRequest(context: Context, request: StringRequest) {
-    Volley.newRequestQueue(context, ProxyStack()).add(request)
-}
-
-class ProxyStack : HurlStack() {
-    override fun createConnection(url: URL): HttpURLConnection {
-        val proxy = Proxy(Proxy.Type.HTTP, InetSocketAddress.createUnresolved("emea-proxy.uk.oracle.com", 80))
-        return url.openConnection(proxy) as HttpURLConnection
-    }
+    Volley.newRequestQueue(context).add(request)
 }
 
 fun Any.dao() = DaoManager.getDao(Topic::class.java)!!
@@ -81,9 +67,7 @@ fun ImageView.loadFrom(topic: Topic) {
 }
 
 fun loadFrom(image: ImageView, context: Context, links: List<String>) {
-    val client: OkHttpClient = OkHttpClient()
-    client.setProxy(Proxy(Proxy.Type.HTTP, InetSocketAddress.createUnresolved("emea-proxy.uk.oracle.com", 80)))
-    Picasso.Builder(context).downloader(OkHttpDownloader(client)).listener { picasso, _, _ ->
+    Picasso.Builder(context).listener { picasso, _, _ ->
         if (links.size > 1) {
             loadFrom(image, context, links.drop(1))
         } else {

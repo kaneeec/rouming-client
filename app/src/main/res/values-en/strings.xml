@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Rouming Client</string>
+    <string name="app_name">Roumen\'s Rouming</string>
     <string name="title_favorites">Favorites</string>
     <string name="title_latest">Latest</string>
     <string name="title_top">Top</string>
@@ -11,13 +11,16 @@
     <string name="navigation_close">Close navigation</string>
 
     <string name="top_search_for">for</string>
-    <string name="top_search_show">Show top</string>
+    <string name="top_search_show">Top</string>
 
     <string name="empty_list_no_faves">No favorites so far</string>
     <string name="empty_list_latest">Wait for topics to load ...</string>
     <string name="empty_list_top">Hint: try the searching feature ...</string>
-    <string name="comments">Komentáře</string>
-    <string name="close">Zavřít</string>
+
+    <string name="comments">Comments</string>
+    <string name="close">Close</string>
+    <string name="share">Share topic</string>
+    <string name="no_comments">So far there are no comments here</string>
 
     <string-array name="interval">
         <item>last day</item>

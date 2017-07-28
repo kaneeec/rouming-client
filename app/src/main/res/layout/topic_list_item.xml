@@ -124,5 +124,11 @@
             android:id="@+id/faveit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
+
+        <ImageView
+            android:id="@+id/share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/topic_share"/>
     </LinearLayout>
 </RelativeLayout>

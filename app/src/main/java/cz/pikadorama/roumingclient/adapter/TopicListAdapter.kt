@@ -1,6 +1,7 @@
 package cz.pikadorama.roumingclient.adapter
 
 import android.content.Context
+import android.content.Intent
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
@@ -37,7 +38,7 @@ class TopicListAdapter : ArrayAdapter<Topic> {
             downvotes.text = topic.downvotes.toString()
             comments.text = topic.comments.toString()
 
-            showComments.setOnClickListener { showDialogWithComments(context, topic) }
+            showComments.setOnClickListener { showDialogWithComments(topic) }
 
             faveit.setImageResource(if (topic.faved) R.drawable.topic_faved_full else R.drawable.topic_faved_empty)
             faveit.tag = topic.faved
@@ -50,12 +51,22 @@ class TopicListAdapter : ArrayAdapter<Topic> {
 
                 faveit.setImageResource(if (faved) R.drawable.topic_faved_full else R.drawable.topic_faved_empty)
             }
+
+            share.setOnClickListener { shareTopic(topic) }
         }
 
         return view
     }
 
-    private fun showDialogWithComments(context: Context, topic: Topic) {
+    private fun shareTopic(topic: Topic) {
+        val share = Intent(Intent.ACTION_SEND)
+        share.type = "text/plain"
+        share.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.app_name))
+        share.putExtra(Intent.EXTRA_TEXT, topic.link)
+        context.startActivity(Intent.createChooser(share, context.getString(R.string.share)))
+    }
+
+    private fun showDialogWithComments(topic: Topic) {
         val request = UTF8StringRequest(Request.Method.GET, topic.link,
                                         Response.Listener<String> { parseAndShowResponse(it) },
                                         Response.ErrorListener { context.toast(R.string.error_load_topics) })
@@ -64,13 +75,16 @@ class TopicListAdapter : ArrayAdapter<Topic> {
 
     private fun parseAndShowResponse(response: String) {
         val document = Jsoup.parse(response)
-        val messages = document.getElementsByClass("roumingForumMessage").map { it.text().trim() }
+        val messages = document.getElementsByClass("roumingForumMessage").map { it.text().trim() }.drop(1)
         val people = document.getElementsByClass("roumingForumTitle").map {
             it.text().replaceBefore("(", "").replaceAfter(")", "").replace("(", "").replace(")", "").trim()
         }
 
         val content by lazy {
-            val string = people.zip(messages.drop(1)).joinToString(
+            if (messages.isEmpty()) {
+                return@lazy context.getString(R.string.no_comments)
+            }
+            val string = people.zip(messages).joinToString(
                     separator = "<br/><br/>") { "<strong>${it.first}</strong><br/>${it.second}" }
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                 return@lazy Html.fromHtml(string, Html.FROM_HTML_MODE_LEGACY);
