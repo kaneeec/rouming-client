@@ -8,12 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import com.android.volley.Request
 import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
 import cz.pikadorama.roumingclient.*
 import cz.pikadorama.roumingclient.activity.ImageFullscreenActivity
 import cz.pikadorama.roumingclient.adapter.TopicListAdapter
 import cz.pikadorama.roumingclient.data.Topic
-import cz.pikadorama.roumingclient.http.RoumingHttpClient
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_top.*
 import kotlinx.android.synthetic.main.fragment_top.view.*
@@ -57,8 +58,15 @@ class TopFragment : Fragment() {
     }
 
     private fun fetchTopicsFromWeb(limit: Int, interval: Int) {
-        RoumingHttpClient(activity).fetchTop(limit, interval, Response.Listener<String> { processWebResponse(it) },
-                                             Response.ErrorListener { toast(R.string.error_load_topics) })
+        val url = "http://www.rouming.cz/roumingListTop.php"
+        val request = object : StringRequest(Request.Method.POST, url,
+                                             Response.Listener<String> { processWebResponse(it) },
+                                             Response.ErrorListener { toast(R.string.error_load_topics) }) {
+            override fun getParams(): Map<String, String> = mapOf(Pair("count", limit.toString()),
+                                                                  Pair("operation", "1"),
+                                                                  Pair("interval", interval.toString()))
+        }
+        sendHttpRequest(request)
     }
 
     private fun showTopTopics() {

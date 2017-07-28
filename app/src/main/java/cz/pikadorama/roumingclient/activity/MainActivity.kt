@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun initNavigation() {
         navigation.setNavigationItemSelectedListener(this)
+        navigation.menu.getItem(0).isChecked = true
     }
 
     override fun onBackPressed() {

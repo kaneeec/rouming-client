@@ -7,14 +7,21 @@ import android.content.Intent
 import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
+import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.Toast
+import com.android.volley.toolbox.HurlStack
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
 import com.squareup.okhttp.OkHttpClient
+import com.squareup.picasso.OkHttpDownloader
 import com.squareup.picasso.Picasso
 import cz.pikadorama.roumingclient.data.Topic
 import cz.pikadorama.simpleorm.DaoManager
+import java.net.HttpURLConnection
 import java.net.InetSocketAddress
 import java.net.Proxy
+import java.net.URL
 
 
 const val BUNDLE_KEY = "data"
@@ -27,15 +34,25 @@ private fun toast(messageResId: Int, context: Context) = Toast.makeText(context,
 fun Context.startActivity(activityClass: Class<out Activity>, bundle: Bundle = Bundle()) {
     startActivity(activityClass, bundle, this)
 }
-
 fun Fragment.startActivity(activityClass: Class<out Activity>, bundle: Bundle = Bundle()) {
     startActivity(activityClass, bundle, this.activity)
 }
-
 private fun startActivity(activityClass: Class<out Activity>, bundle: Bundle, context: Context) {
     val intent = Intent(context, activityClass)
     intent.putExtras(bundle)
     context.startActivity(intent)
+}
+
+fun Fragment.sendHttpRequest(request: StringRequest) = sendHttpRequest(activity, request)
+fun ArrayAdapter<out Any>.sendHttpRequest(request: StringRequest) = sendHttpRequest(context, request)
+private fun  sendHttpRequest(context: Context, request: StringRequest) {
+    Volley.newRequestQueue(context, ProxyStack()).add(request)
+}
+class ProxyStack : HurlStack() {
+    override fun createConnection(url: URL): HttpURLConnection {
+        val proxy = Proxy(Proxy.Type.HTTP, InetSocketAddress.createUnresolved("emea-proxy.uk.oracle.com", 80))
+        return url.openConnection(proxy) as HttpURLConnection
+    }
 }
 
 fun Any.dao() = DaoManager.getDao(Topic::class.java)!!
@@ -61,13 +78,12 @@ fun Bundle.toTopic(): Topic {
 }
 
 fun ImageView.loadFrom(topic: Topic) {
-    val client: OkHttpClient = OkHttpClient()
-    client.setProxy(Proxy(Proxy.Type.HTTP, InetSocketAddress.createUnresolved("emea-proxy.uk.oracle.com", 80)))
     loadFrom(this, context, topic.imageDirectLinks())
 }
-
 fun loadFrom(image: ImageView, context: Context, links: List<String>) {
-    Picasso.Builder(context).listener { picasso, _, _ ->
+    val client: OkHttpClient = OkHttpClient()
+    client.setProxy(Proxy(Proxy.Type.HTTP, InetSocketAddress.createUnresolved("emea-proxy.uk.oracle.com", 80)))
+    Picasso.Builder(context).downloader(OkHttpDownloader(client)).listener { picasso, _, _ ->
         if (links.size > 1) {
             loadFrom(image, context, links.drop(1))
         } else {
@@ -80,3 +96,4 @@ fun loadFrom(image: ImageView, context: Context, links: List<String>) {
             .error(R.drawable.image_loading_error)
             .into(image)
 }
+

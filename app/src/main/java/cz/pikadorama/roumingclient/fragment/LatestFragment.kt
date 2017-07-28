@@ -7,12 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
+import com.android.volley.Request
 import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
 import cz.pikadorama.roumingclient.*
 import cz.pikadorama.roumingclient.activity.ImageFullscreenActivity
 import cz.pikadorama.roumingclient.adapter.TopicListAdapter
 import cz.pikadorama.roumingclient.data.Topic
-import cz.pikadorama.roumingclient.http.RoumingHttpClient
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_latest.*
 import kotlinx.android.synthetic.main.fragment_latest.view.*
@@ -47,8 +48,15 @@ class LatestFragment : Fragment() {
     }
 
     private fun fetchTopicsFromWeb() {
-        RoumingHttpClient(activity).fetchLatest(Response.Listener<String> { processWebResponse(it) },
-                                                Response.ErrorListener { toast(R.string.error_load_topics) })
+        val url = "http://www.rouming.cz"
+        val request = StringRequest(Request.Method.GET, url, Response.Listener<String> {
+            processWebResponse(it)
+            refreshLayout.isRefreshing = false
+        }, Response.ErrorListener {
+            toast(R.string.error_load_topics)
+            refreshLayout.isRefreshing = false
+        })
+        sendHttpRequest(request)
     }
 
     private fun showLatestTopics() {
@@ -64,7 +72,6 @@ class LatestFragment : Fragment() {
         val topics = Topic.fromResponse(response)
         updateTopicsInDatabase(topics)
         updateList(topics)
-        refreshLayout.isRefreshing = false
     }
 
     private fun updateList(topics: List<Topic>) {
