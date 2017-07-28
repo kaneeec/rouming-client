@@ -2,6 +2,7 @@ package cz.pikadorama.roumingclient.activity
 
 import android.app.Fragment
 import android.os.Bundle
+import android.os.Handler
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
@@ -44,11 +45,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.latest -> showFragment(LatestFragment())
-            R.id.top -> showFragment(TopFragment())
-            R.id.favorites -> showFragment(FavoritesFragment())
-        }
+        Handler().postDelayed({
+            when (item.itemId) {
+                R.id.latest -> showFragment(LatestFragment())
+                R.id.top -> showFragment(TopFragment())
+                R.id.favorites -> showFragment(FavoritesFragment())
+            }
+        }, 400)
 
         drawer.closeDrawer(GravityCompat.START)
         return true

@@ -56,11 +56,17 @@
 
         </LinearLayout>
 
-        <ListView
-            android:id="@android:id/list"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/refreshLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/searchBar"/>
+            android:layout_below="@+id/searchBar">
+
+            <ListView
+                android:id="@android:id/list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </android.support.v4.widget.SwipeRefreshLayout>
     </RelativeLayout>
 
 </LinearLayout>

@@ -31,7 +31,14 @@ class TopFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val root = inflater.inflate(R.layout.fragment_top, container, false)
 
+        root.refreshLayout.setOnRefreshListener {
+            val prefs = activity.getPreferences(Context.MODE_PRIVATE)
+            fetchTopicsFromWeb(prefs.getInt(PREF_LIMIT, 0), prefs.getInt(PREF_INTERVAL, 0))
+        }
+        root.refreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent)
+
         root.search.setOnClickListener {
+            refreshLayout.isRefreshing = true
             fetchTopicsFromWeb(root.limit.selectedItemPosition, root.interval.selectedItemPosition)
         }
 
@@ -61,6 +68,7 @@ class TopFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         activity.toolbar.setTitle(R.string.title_top)
+        refreshLayout.isRefreshing = true
         showTopTopics()
         listState?.let { list.onRestoreInstanceState(listState) }
     }
@@ -95,6 +103,9 @@ class TopFragment : Fragment() {
         val cachedTopics = dao().findAll().filter { it.type == Topic.Type.TOP }
         if (!cachedTopics.isEmpty()) {
             updateList(cachedTopics)
+        } else {
+            val prefs = activity.getPreferences(Context.MODE_PRIVATE)
+            fetchTopicsFromWeb(prefs.getInt(PREF_LIMIT, 0), prefs.getInt(PREF_INTERVAL, 0))
         }
     }
 
@@ -106,6 +117,7 @@ class TopFragment : Fragment() {
 
     private fun updateList(topics: List<Topic>) {
         list.adapter = TopicListAdapter(activity, topics)
+        refreshLayout.isRefreshing = false
     }
 
 }

@@ -24,7 +24,7 @@ class FavoritesFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val root = inflater.inflate(R.layout.fragment_favorites, container, false)
 
-        root.refreshLayout.setOnRefreshListener({ updateList() })
+        root.refreshLayout.setOnRefreshListener { updateList() }
         root.refreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent)
 
         val lv = root.findViewById(android.R.id.list) as ListView
